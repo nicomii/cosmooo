@@ -1,0 +1,6 @@
+Solutions for Data0:
+Omega M = 0.30
+Omega X = 0.70
+Omega R = 0.00
+w0 = -1.00
+wa = -0.00
