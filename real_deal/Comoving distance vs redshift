@@ -1,0 +1,46 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import quad
+# import pandas lib as pd
+import pandas as pd
+rd = pd.read_csv('C:/Users/gg2me/Desktop/PHYS3080/COSMO_REAL_DATA.csv')
+mu = rd['MU']
+z_hd = rd['zHD']
+rd.head()
+ 
+def read_data(file_path):
+    data = np.genfromtxt(file_path, delimiter=',')
+    z_hd = data[:, 3]
+    mu = data[:, 5]
+    muerr = data[:, 6]
+    return z_hd, mu, muerr
+
+def Hubble_parameter(z):
+    return H0 * np.sqrt(Omega_m * (1 + z)**3 + Omega_L)
+
+def comoving_distance(z):
+    integrand = lambda z: 1.0 / Hubble_parameter(z)
+    integral, _ = quad(integrand, 0, z)
+    return integral * c / H0
+
+# Define cosmological parameters
+H0 = 70  # Hubble constant in km/s/Mpc
+c = 299792.458  # Speed of light in km/s
+Omega_m = 0.3  # Matter density parameter
+Omega_L = 0.7  # Dark energy density parameter
+
+# Example usage
+file_path = "C:/Users/gg2me/Desktop/PHYS3080/COSMO_REAL_DATA.csv"
+z_hd, _, _ = read_data(file_path)
+
+# Calculate comoving distances for each redshift
+comoving_distances = [comoving_distance(z) for z in zs]
+
+# Plot
+plt.scatter(zs, comoving_distances, label='Comoving distance vs Redshift', marker='o')
+plt.xlabel('Redshift (z)')
+plt.ylabel('Comoving distance (Mpc)')
+plt.title('Comoving Distance of Galaxies at Different Redshifts')
+plt.legend()
+plt.grid(True)
+plt.show()
